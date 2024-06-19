@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Apothacalc.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Width="300"
+        Height="325"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="325"
+        x:Class="Apothacalc.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/Apothacalc_Icon.png"
+        Title="Apothacalc"
+        Background="{StaticResource BackgroundColor}">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <!-- Component Definition -->
+    <Border Padding="15">
+        <StackPanel>
+            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+            
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="20">
+                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="Q | D/s" Text="{Binding DaySupplyOrQuantity}"/>
+                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="Dosage" Text="{Binding Dosage}"/>
+                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="#X's" Text="{Binding XPerWeek}"/>
+                </StackPanel> 
+            
+                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="46" Margin="10">
+                    <TextBlock Classes="f1" TextAlignment="Left" VerticalAlignment="Center" Text="Quantity | D/s"/>
+                    <TextBlock Classes="f1" TextAlignment="Left" VerticalAlignment="Center" Text="Dose per act."/>
+                    <TextBlock Classes="f1" TextAlignment="Left" VerticalAlignment="Center" Text="# X's per week"/>
+                </StackPanel>
+            
+            </Grid>
+        
+            <ComboBox  Width="205" Margin="0, 20" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="f1"
+                       SelectedIndex="{Binding SelectedMode}">
+                <ComboBoxItem Content="Quantity -> Day Supply"/>
+                <ComboBoxItem Content="Day Supply -> Quantity"/>
+            </ComboBox>
+            
+            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Grid.Row="0" Grid.Column="0" Content="Calculate" Classes="f1" Command="{Binding CalculateCommand}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="10, 0" IsReadOnly="True" Focusable="False" Classes="f2" 
+                         Text="{Binding Output}"/>
+            </Grid>
+            
+            <TextBlock Text="{Binding Log}" Margin="0, 5" HorizontalAlignment="Center"
+                       TextAlignment="Center" VerticalAlignment="Center" Classes="error"/>
+            
+        </StackPanel>
+    </Border>
+</Window>
