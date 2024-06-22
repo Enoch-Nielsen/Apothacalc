@@ -1,18 +1,19 @@
-﻿
-using System;
-using System.ComponentModel;
-using System.Globalization;
+﻿using System;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 using Apothacalc.Models;
 using ReactiveUI;
 
 namespace Apothacalc.ViewModels;
 
-using System.Threading.Tasks;
-
+/// <summary>
+/// # Author Enoch Nielsen
+/// # Version 6/21/24
+/// </summary>
 public class MainWindowViewModel : ViewModelBase
 {
+    /// <summary>
+    /// The output value for calculations.
+    /// </summary>
     private double _output;
     public double Output
     {
@@ -20,6 +21,9 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _output, value);
     }
 
+    /// <summary>
+    /// Day supply or quantity input value.
+    /// </summary>
     private string _ds_q;
     public string DaySupplyOrQuantity
     {
@@ -31,6 +35,9 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// Dosage input value.
+    /// </summary>
     private string _dosage;
     public string Dosage
     {
@@ -42,6 +49,9 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// X's per week input value.
+    /// </summary>
     private string _xpw;
     public string XPerWeek
     {
@@ -53,6 +63,9 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>
+    /// The users selected mode.
+    /// </summary>
     private int _selection;
 
     public int SelectedMode
@@ -62,9 +75,25 @@ public class MainWindowViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _selection, value);
             IsValid = CheckIsValid();
+            
+            ModeString = SelectedMode == 1 ? "Quantity = " : "Day Supply = ";
         }
     }
 
+    /// <summary>
+    /// The users mode converted to a string.
+    /// </summary>
+    private string _modeString;
+
+    public string ModeString
+    {
+        get => _modeString;
+        set => this.RaiseAndSetIfChanged(ref _modeString, value);
+    }
+
+    /// <summary>
+    /// Whether the users input is valid.
+    /// </summary>
     private bool _isValid;
     public bool IsValid
     {
@@ -72,6 +101,9 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _isValid, value);
     }
 
+    /// <summary>
+    /// Log output value.
+    /// </summary>
     private string _log;
 
     public string Log
@@ -89,13 +121,20 @@ public class MainWindowViewModel : ViewModelBase
             x => x == true
         );
 
+        ModeString = "Day Supply = ";
+        
         CalculateCommand = ReactiveCommand.Create(DoCalculate, isInputValid);
     }
 
+    /// <summary>
+    /// Checks if the users input is valid, then either logs an error or
+    /// begins calculating when appropriate.
+    /// </summary>
+    /// <returns></returns>
     private bool CheckIsValid()
     {
         // Log that the fields are empty.
-        if (string.IsNullOrWhiteSpace(DaySupplyOrQuantity))            return LogData("Day supply or quanity is empty.");
+        if (string.IsNullOrWhiteSpace(DaySupplyOrQuantity))            return LogData("Day supply or quantity is empty.");
         if (string.IsNullOrWhiteSpace(Dosage))                         return LogData("Dosage is empty.");
         if (string.IsNullOrWhiteSpace(XPerWeek))                       return LogData("X' per week is empty.");
  
@@ -105,19 +144,33 @@ public class MainWindowViewModel : ViewModelBase
         if (!double.TryParse(XPerWeek, out double parseX))             return LogData("X' per week is not a decimal.");
 
         // Log out of bounds.
-        if (parseDs is > 1200.0 or < 0.1)                              return LogData("Day supply or quantity out of range.");
-        if (parseDose is > 10000.0 or < 0.01)                          return LogData("Dosage out of range.");
-        if (parseX is > 60.0 or < 1.0)                                 return LogData("X' per week out of range.");
+        if (parseDs is < Calculator.DAY_SUPPLY_MIN or > Calculator.DAY_SUPPLY_MAX) return LogData("Day supply or quantity out of range.");
+        if (parseDose is < Calculator.DOSE_MIN or > Calculator.DOSE_MAX)           return LogData("Dosage out of range.");
+        if (parseX is < Calculator.PER_WEEK_MIN or > Calculator.PER_WEEK_MAX)      return LogData("X' per week out of range.");
 
+        DoCalculate();
         LogData("");
+        
         return true;
     }
 
+    /// <summary>
+    /// Logs errors to the user.
+    /// </summary>
+    /// <param name="error"></param>
+    /// <returns></returns>
     private bool LogData(string error)
     {
         Log = error;
+
+        if (error.Length > 1)
+            Output = 0;
+        
         return false;
     }
 
+    /// <summary>
+    /// Button binding to begin calculation.
+    /// </summary>
     private void DoCalculate() => Output = Calculator.Calculate(DaySupplyOrQuantity, Dosage, XPerWeek, SelectedMode);
 }

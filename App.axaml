@@ -11,14 +11,14 @@
              
     <Application.Resources>
         <!-- Colors -->
-        <SolidColorBrush x:Key="BackgroundColor" Color="#abb8ba"/>
-        <SolidColorBrush x:Key="ForegroundTextMain" Color="#4a5052"/>
+        <SolidColorBrush x:Key="BackgroundColor" Color="#171b1c"/>
+        <SolidColorBrush x:Key="ForegroundTextMain" Color="#919fa3"/>
         <SolidColorBrush x:Key="ForegroundTextBox" Color="#b4bfbf"/>
         <SolidColorBrush x:Key="TextBoxBackground" Color="#3d4040"/>
         <SolidColorBrush x:Key="ComboBoxBackground" Color="#4f5b5e"/>
         <SolidColorBrush x:Key="ButtonHover" Color="#5c6a6e"/>
         <SolidColorBrush x:Key="Error" Color="#7a1f0c"/>
-        <SolidColorBrush x:Key="Positive" Color="#088a1e"/>
+        <SolidColorBrush x:Key="Positive" Color="#0aa324"/>
         
     </Application.Resources>
              
@@ -40,7 +40,7 @@
         
         <!-- Error Text Block -->
         <Style Selector="TextBlock.error">
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="{StaticResource Error}"/>
             <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
