@@ -25,4 +25,8 @@
     <ItemGroup>
       <Folder Include="Assets\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Themes\HighContrast.axaml" />
+    </ItemGroup>
 </Project>

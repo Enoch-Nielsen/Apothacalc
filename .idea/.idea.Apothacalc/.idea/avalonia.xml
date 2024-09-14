@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="App.axaml" value="Apothacalc.csproj" />
+        <entry key="Themes/HighContrast.axaml" value="Apothacalc.csproj" />
         <entry key="Views/MainWindow.axaml" value="Apothacalc.csproj" />
       </map>
     </option>

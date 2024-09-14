@@ -2,39 +2,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Apothacalc.App"
              xmlns:local="using:Apothacalc"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
+             RequestedThemeVariant="Light">
+    
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
              
     <Application.Resources>
         <!-- Colors -->
-        <SolidColorBrush x:Key="BackgroundColor" Color="#171b1c"/>
-        <SolidColorBrush x:Key="ForegroundTextMain" Color="#919fa3"/>
-        <SolidColorBrush x:Key="ForegroundTextBox" Color="#b4bfbf"/>
-        <SolidColorBrush x:Key="TextBoxBackground" Color="#3d4040"/>
-        <SolidColorBrush x:Key="ComboBoxBackground" Color="#4f5b5e"/>
-        <SolidColorBrush x:Key="ButtonHover" Color="#5c6a6e"/>
         <SolidColorBrush x:Key="Error" Color="#7a1f0c"/>
         <SolidColorBrush x:Key="Positive" Color="#0aa324"/>
-        
     </Application.Resources>
              
     <Application.Styles>
         <FluentTheme>
             <FluentTheme.Palettes>
-                <ColorPaletteResources x:Key="Light" Accent="Azure" RegionColor="White" ErrorText="Red"/>
+                <ColorPaletteResources x:Key="Light" Accent="#ff018d6d" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffcccccc" BaseMedium="#ff898989" BaseMediumHigh="#ff5d5d5d" BaseMediumLow="#ff737373" ChromeAltLow="#ff5d5d5d" ChromeBlackHigh="Black" ChromeBlackLow="#ffcccccc" ChromeBlackMedium="#ff5d5d5d" ChromeBlackMediumLow="#ff898989" ChromeDisabledHigh="#ffcccccc" ChromeDisabledLow="#ff898989" ChromeGray="#ff737373" ChromeHigh="#ffcccccc" ChromeLow="#ffececec" ChromeMedium="#ffe6e6e6" ChromeMediumLow="#ffececec" ChromeWhite="White" ListLow="#ffe6e6e6" ListMedium="#ffcccccc" RegionColor="White" />
+                <ColorPaletteResources x:Key="Dark" Accent="#ff2d5c6b" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff292d33" BaseMedium="#ff9297a3" BaseMediumHigh="#ffacb1bf" BaseMediumLow="#ff5d626b" ChromeAltLow="#ffacb1bf" ChromeBlackHigh="Black" ChromeBlackLow="#ffacb1bf" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff292d33" ChromeDisabledLow="#ff9297a3" ChromeGray="#ff787c87" ChromeHigh="#ff787c87" ChromeLow="#ff081329" ChromeMedium="#ff101a2c" ChromeMediumLow="#ff212731" ChromeWhite="White" ListLow="#ff101a2c" ListMedium="#ff292d33" RegionColor="Black" />
             </FluentTheme.Palettes>
         </FluentTheme>
+
         
         <!-- Styles -->
         
         <!-- Generic Text Block -->
         <Style Selector="TextBlock.f1">
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="{StaticResource ForegroundTextMain}"/>
             <Setter Property="FontWeight" Value="DemiBold"/>
         </Style>
         
@@ -47,14 +42,7 @@
         
         <!-- Generic Text Box -->
         <Style Selector="TextBox.f1">
-            <Setter Property="Width" Value="150"/>
             <Setter Property="Height" Value="45"/>
-            
-            <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            
-            <Setter Property="Foreground" Value="{StaticResource ForegroundTextBox}"/>
-            <Setter Property="CaretBrush" Value="{StaticResource ForegroundTextBox}"/>
             
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -66,56 +54,12 @@
         
         <!-- Readonly Text Box -->
         <Style Selector="TextBox.f2">
-            <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            
-            <Setter Property="Foreground" Value="{StaticResource Positive}"/>
-            <Setter Property="CaretBrush" Value="{StaticResource ForegroundTextBox}"/>
-            
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="FontWeight" Value="Heavy"/>
             <Setter Property="FontStyle" Value="Italic"/>
-        </Style>
-        
-        <!-- Focused Text Box -->
-        <Style Selector="TextBox.f1:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <!-- Hovered Text Box -->
-        <Style Selector="TextBox.f1:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{StaticResource TextBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <!-- Generic ComboBox -->
-        <Style Selector="ComboBox.f1">
-            <Setter Property="Background" Value="{StaticResource ComboBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <!-- Focused ComboBox -->
-        <Style Selector="ComboBox.f1:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="{StaticResource ComboBoxBackground}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <!-- Generic Button -->
-        <Style Selector="Button.f1">
-                <Setter Property="Background" Value="{StaticResource ComboBoxBackground}"/>
-                <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        
-        <!-- Hover Button -->
-        <Style Selector="Button.f1:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-        <Style Selector="Button.f1:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{StaticResource ButtonHover}"/>
         </Style>
         
     </Application.Styles>

@@ -3,33 +3,27 @@
         xmlns:vm="using:Apothacalc.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="300"
-        Height="275"
-        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="275"
+        Width="400"
+        Height="375"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="375"
         x:Class="Apothacalc.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/Apothacalc_Icon.png"
-        Title="Apothacalc"
-        Background="{StaticResource BackgroundColor}">
+        Title="Apothacalc">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
     <!-- Component Definition -->
-    <Border Padding="15">
-        <StackPanel>
-            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Border Padding="15" VerticalAlignment="Stretch">
+        <DockPanel VerticalAlignment="Stretch" LastChildFill="True">
             
-                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="20">
-                    <!-- User Input  -->
-                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="Q | D/s" Text="{Binding DaySupplyOrQuantity}"/>
-                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="Dosage" Text="{Binding Dosage}"/>
-                    <TextBox Classes="f1" HorizontalAlignment="Center" Watermark="#X's" Text="{Binding XPerWeek}"/>
-                    
-                </StackPanel> 
-            
-                <StackPanel Grid.Row="0" Grid.Column="1" Spacing="45" Margin="10">
+            <!-- Top Control Dock-->
+            <DockPanel HorizontalAlignment="Stretch" Margin="10" MinWidth="150" LastChildFill="True" DockPanel.Dock="Top">
+                
+                <!-- Labels and Mode -->
+                <StackPanel DockPanel.Dock="Right" Spacing="45" Margin="10" HorizontalAlignment="Right">
                     
                     <!-- Mode Selection -->
                     <ComboBox  Width="120" Height="45" Margin="-2, -10" HorizontalAlignment="Center" Classes="f1"
@@ -39,26 +33,42 @@
                     </ComboBox>
                     
                     <!-- Input Labels -->
-                    <TextBlock Classes="f1" TextAlignment="Left" VerticalAlignment="Center" Text="Dose per act."/>
-                    <TextBlock Classes="f1" TextAlignment="Left" VerticalAlignment="Center" Text="# X's per week"/>
+                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Total Daily Dose"/>
+                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Center" Text="# X's per week"/>
                 </StackPanel>
-            
-            </Grid>
-            
-            <StackPanel Orientation="Horizontal" Margin="-105, 20" Spacing="5" HorizontalAlignment="Center">
                 
-                <!-- Output Text -->
-                <TextBlock Text="{Binding ModeString}" 
-                           TextAlignment="Right" VerticalAlignment="Center" Classes="f1" Width="120" HorizontalAlignment="Right"/>
-                <TextBox IsReadOnly="True" Focusable="False" Classes="f2" 
-                         Text="{Binding Output}" TextAlignment="Center"/>
+                <!-- User Input  -->
+                <StackPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Spacing="25">
+                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="Q | D/s" Text="{Binding DaySupplyOrQuantity}"/>
+                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="Dosage" Text="{Binding Dosage}"/>
+                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="#X's" Text="{Binding XPerWeek}"/>
+                </StackPanel>
                 
-            </StackPanel>
+            </DockPanel> 
             
-            <!-- Error Logging Text -->
-            <TextBlock Text="{Binding Log}" Margin="0, -10" HorizontalAlignment="Center"
-                       TextAlignment="Center" Classes="error"/>
-            
-        </StackPanel>
+            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
+                
+                <Viewbox Stretch="Uniform" StretchDirection="Both" DockPanel.Dock="Top" HorizontalAlignment="Center"
+                         Margin="100, 0" MinWidth="200" MinHeight="25" MaxWidth="250" MaxHeight="30">
+                    <!-- Error Logging Text -->
+                    <TextBlock Text="{Binding Log}" HorizontalAlignment="Center"
+                               TextAlignment="Center" Classes="error"/>
+                </Viewbox>
+
+                <Viewbox Stretch="Uniform" StretchDirection="Both" DockPanel.Dock="Bottom" HorizontalAlignment="Center"
+                         Margin="150, 0" MinWidth="200" MinHeight="25" MaxWidth="300" MaxHeight="50">
+                    <!-- Output -->
+                    <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
+                
+                        <!-- Output Text -->
+                        <TextBlock Text="{Binding ModeString}" 
+                                   TextAlignment="Right" VerticalAlignment="Center" Classes="f1" Width="120" MaxWidth="180" HorizontalAlignment="Center"/>
+                        <TextBox IsReadOnly="True" Focusable="False" Classes="f2" 
+                                 Text="{Binding Output}" TextAlignment="Center" VerticalAlignment="Center"/>
+                
+                    </StackPanel>
+                </Viewbox>
+            </DockPanel>
+        </DockPanel>
     </Border>
 </Window>
