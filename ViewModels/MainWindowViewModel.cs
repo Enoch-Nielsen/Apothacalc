@@ -1,6 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using Apothacalc.Models;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Platform;
+using Avalonia.Styling;
+using Avalonia.Themes.Fluent;
 using ReactiveUI;
 
 namespace Apothacalc.ViewModels;
@@ -21,6 +28,28 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _output, value);
     }
 
+    /// <summary>
+    /// The output End Date.
+    /// </summary>
+    private string _endDate;
+
+    public string EndDate
+    {
+        get => _endDate;
+        set => this.RaiseAndSetIfChanged(ref _endDate, value);
+    }  
+    
+    /// <summary>
+    /// The output End Date.
+    /// </summary>
+    private DateTime _startDate;
+
+    public DateTime StartDate
+    {
+        get => _startDate;
+        set => this.RaiseAndSetIfChanged(ref _startDate, value);
+    }
+    
     /// <summary>
     /// Day supply or quantity input value.
     /// </summary>
@@ -76,8 +105,24 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _selection, value);
             IsValid = CheckIsValid();
             
-            ModeString = SelectedMode == 1 ? "Quantity = " : "Day Supply = ";
+            ModeString = SelectedMode == 3 ? "Quantity: " : "Day Supply: ";
+            ModeStringFlipped = SelectedMode != 3 ? "Quantity" : "Day Supply";
+            IsDaySupplyMode = SelectedMode != 3;
+            
+            if (!IsDaySupplyMode)
+                EndDate = "";
         }
+    }
+    
+    /// <summary>
+    /// The users selected mode.
+    /// </summary>
+    private bool _mode_s;
+
+    public bool IsDaySupplyMode
+    {
+        get => _mode_s;
+        set => this.RaiseAndSetIfChanged(ref _mode_s, value);
     }
 
     /// <summary>
@@ -89,6 +134,17 @@ public class MainWindowViewModel : ViewModelBase
     {
         get => _modeString;
         set => this.RaiseAndSetIfChanged(ref _modeString, value);
+    }
+    
+    /// <summary>
+    /// The users mode converted to a string.
+    /// </summary>
+    private string _modeStringFlipped;
+
+    public string ModeStringFlipped
+    {
+        get => _modeStringFlipped;
+        set => this.RaiseAndSetIfChanged(ref _modeStringFlipped, value);
     }
 
     /// <summary>
@@ -121,9 +177,15 @@ public class MainWindowViewModel : ViewModelBase
             x => x == true
         );
 
-        ModeString = "Day Supply = ";
+        ModeString = "Day Supply: ";
+        ModeStringFlipped = "Quantity";
+        IsDaySupplyMode = true;
+        
+        StartDate = DateTime.Today;
+        EndDate = StartDate.ToShortDateString();
         
         CalculateCommand = ReactiveCommand.Create(DoCalculate, isInputValid);
+        DoCalculate();
     }
 
     /// <summary>
@@ -172,5 +234,35 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Button binding to begin calculation.
     /// </summary>
-    private void DoCalculate() => Output = Calculator.Calculate(DaySupplyOrQuantity, Dosage, XPerWeek, SelectedMode);
+    private void DoCalculate()
+    {
+        Calculator.CalculatorOutput calculatorOutput = Calculator.Calculate(DaySupplyOrQuantity, Dosage, XPerWeek, SelectedMode, _startDate);
+
+        if (calculatorOutput.Value == -1.0)
+            return;
+        
+        Output = calculatorOutput.Value;
+        EndDate = calculatorOutput.DateValue.ToShortDateString();
+        
+        if (!IsDaySupplyMode)
+            EndDate = "";
+    }
+
+    /// <summary>
+    /// Button Binding to Change the Theme to Dark
+    /// </summary>
+    public void SetDarkTheme()
+    {
+        if (Application.Current != null) 
+            Application.Current.RequestedThemeVariant = ThemeVariant.Dark;
+    }    
+    
+    /// <summary>
+    /// Button Binding to Change the Theme to Dark
+    /// </summary>
+    public void SetLightTheme()
+    {
+        if (Application.Current != null) 
+            Application.Current.RequestedThemeVariant = ThemeVariant.Light;
+    }
 }

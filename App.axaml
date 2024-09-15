@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Apothacalc.App"
              xmlns:local="using:Apothacalc"
-             RequestedThemeVariant="Light">
+             RequestedThemeVariant="Dark">
     
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
              
@@ -14,30 +14,34 @@
         <!-- Colors -->
         <SolidColorBrush x:Key="Error" Color="#7a1f0c"/>
         <SolidColorBrush x:Key="Positive" Color="#0aa324"/>
+        
+        
+        <!-- Images -->
     </Application.Resources>
              
+    <!-- Styles -->
     <Application.Styles>
         <FluentTheme>
             <FluentTheme.Palettes>
-                <ColorPaletteResources x:Key="Light" Accent="#ff018d6d" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffcccccc" BaseMedium="#ff898989" BaseMediumHigh="#ff5d5d5d" BaseMediumLow="#ff737373" ChromeAltLow="#ff5d5d5d" ChromeBlackHigh="Black" ChromeBlackLow="#ffcccccc" ChromeBlackMedium="#ff5d5d5d" ChromeBlackMediumLow="#ff898989" ChromeDisabledHigh="#ffcccccc" ChromeDisabledLow="#ff898989" ChromeGray="#ff737373" ChromeHigh="#ffcccccc" ChromeLow="#ffececec" ChromeMedium="#ffe6e6e6" ChromeMediumLow="#ffececec" ChromeWhite="White" ListLow="#ffe6e6e6" ListMedium="#ffcccccc" RegionColor="White" />
-                <ColorPaletteResources x:Key="Dark" Accent="#ff2d5c6b" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff292d33" BaseMedium="#ff9297a3" BaseMediumHigh="#ffacb1bf" BaseMediumLow="#ff5d626b" ChromeAltLow="#ffacb1bf" ChromeBlackHigh="Black" ChromeBlackLow="#ffacb1bf" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff292d33" ChromeDisabledLow="#ff9297a3" ChromeGray="#ff787c87" ChromeHigh="#ff787c87" ChromeLow="#ff081329" ChromeMedium="#ff101a2c" ChromeMediumLow="#ff212731" ChromeWhite="White" ListLow="#ff101a2c" ListMedium="#ff292d33" RegionColor="Black" />
+                <ColorPaletteResources x:Key="Light" Accent="#ff013d6e" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffc7d0d1" BaseMedium="#ff659293" BaseMediumHigh="#ff24686a" BaseMediumLow="#ff457d7f" ChromeAltLow="#ff24686a" ChromeBlackHigh="Black" ChromeBlackLow="#ffc7d0d1" ChromeBlackMedium="#ff24686a" ChromeBlackMediumLow="#ff659293" ChromeDisabledHigh="#ffc7d0d1" ChromeDisabledLow="#ff659293" ChromeGray="#ff457d7f" ChromeHigh="#ffc7d0d1" ChromeLow="#ffdbf2f2" ChromeMedium="#ffd7ebeb" ChromeMediumLow="#ffdbf2f2" ChromeWhite="White" ListLow="#ffd7ebeb" ListMedium="#ffc7d0d1" RegionColor="#fff0fdff" />
+                <!-- <ColorPaletteResources x:Key="Light" Accent="#ff018d6d" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffcccccc" BaseMedium="#ff898989" BaseMediumHigh="#ff5d5d5d" BaseMediumLow="#ff737373" ChromeAltLow="#ff5d5d5d" ChromeBlackHigh="Black" ChromeBlackLow="#ffcccccc" ChromeBlackMedium="#ff5d5d5d" ChromeBlackMediumLow="#ff898989" ChromeDisabledHigh="#ffcccccc" ChromeDisabledLow="#ff898989" ChromeGray="#ff737373" ChromeHigh="#ffcccccc" ChromeLow="#ffececec" ChromeMedium="#ffe6e6e6" ChromeMediumLow="#ffececec" ChromeWhite="White" ListLow="#ffe6e6e6" ListMedium="#ffcccccc" RegionColor="White" /> -->
+                <!-- <ColorPaletteResources x:Key="Dark" Accent="#ff2d5c6b" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff292d33" BaseMedium="#ff9297a3" BaseMediumHigh="#ffacb1bf" BaseMediumLow="#ff5d626b" ChromeAltLow="#ffacb1bf" ChromeBlackHigh="Black" ChromeBlackLow="#ffacb1bf" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff292d33" ChromeDisabledLow="#ff9297a3" ChromeGray="#ff787c87" ChromeHigh="#ff787c87" ChromeLow="#ff081329" ChromeMedium="#ff101a2c" ChromeMediumLow="#ff212731" ChromeWhite="White" ListLow="#ff101a2c" ListMedium="#ff292d33" RegionColor="Black" /> -->
+                <ColorPaletteResources x:Key="Dark" Accent="#ff2d7d9a" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff181c2e" BaseMedium="#ff8a8ea0" BaseMediumHigh="#ffa7abbd" BaseMediumLow="#ff515567" ChromeAltLow="#ffa7abbd" ChromeBlackHigh="Black" ChromeBlackLow="#ffa7abbd" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff181c2e" ChromeDisabledLow="#ff8a8ea0" ChromeGray="#ff6e7284" ChromeHigh="#ff6e7284" ChromeLow="#ff050a27" ChromeMedium="#ff0a0f29" ChromeMediumLow="#ff13182c" ChromeWhite="White" ListLow="#ff0a0f29" ListMedium="#ff181c2e" RegionColor="#ff101014" />
+
             </FluentTheme.Palettes>
         </FluentTheme>
 
-        
-        <!-- Styles -->
-        
         <!-- Generic Text Block -->
         <Style Selector="TextBlock.f1">
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="FontWeight" Value="500"/>
         </Style>
         
         <!-- Error Text Block -->
         <Style Selector="TextBlock.error">
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Foreground" Value="{StaticResource Error}"/>
-            <Setter Property="FontWeight" Value="DemiBold"/>
+            <Setter Property="FontWeight" Value="600"/>
         </Style>
         
         <!-- Generic Text Box -->
@@ -48,7 +52,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Heavy"/>
+            <Setter Property="FontWeight" Value="600"/>
             <Setter Property="FontStyle" Value="Italic"/>
         </Style>
         
@@ -58,7 +62,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Heavy"/>
+            <Setter Property="FontWeight" Value="600"/>
             <Setter Property="FontStyle" Value="Italic"/>
         </Style>
         

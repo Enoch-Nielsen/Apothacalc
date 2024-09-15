@@ -1,4 +1,5 @@
 using System;
+using Avalonia.Controls;
 
 namespace Apothacalc.Models;
 
@@ -21,15 +22,48 @@ public static class Calculator
     /// <param name="dosage"></param>
     /// <param name="xPerWeek"></param>
     /// <param name="mode"></param>
+    /// <param name="endDate"></param>
     /// <returns></returns>
-    public static double Calculate(string daySupplyOrQuantity, string dosage, string xPerWeek, int mode)
+    public static CalculatorOutput Calculate(string daySupplyOrQuantity, string dosage, string xPerWeek, int mode, DateTime startDate)
     {
-        if (!float.TryParse(daySupplyOrQuantity, out float parseDs)) return 0;
-        if (!float.TryParse(dosage, out float parseDose)) return 0;
-        if (!float.TryParse(xPerWeek, out float parseX)) return 0;
+        if (!float.TryParse(daySupplyOrQuantity, out float parseDs)) return new CalculatorOutput();
+        if (!float.TryParse(dosage, out float parseDose)) return new CalculatorOutput();
+        if (!float.TryParse(xPerWeek, out float parseX)) return new CalculatorOutput();
 
-        if (mode == 0) return (int)((parseDs / (parseDose * parseX)) * 7f);
+        CalculatorOutput output = new();
+        DateTime endDate = startDate;
+        output.DateValue = endDate;
 
-        return (Math.Round((parseDs / 7) * (parseDose * parseX) * 10) / 10.0);
+        if (mode == 3)
+        {
+            output.Value = (Math.Round((parseDs / 7) * (parseDose * parseX) * 10) / 10.0);
+        }
+        else
+        {
+            output.Value = (int)((parseDs / (parseDose * parseX)) * 7f);
+
+            endDate = mode switch
+            {
+                0 => endDate.AddDays(output.Value),
+                1 => endDate.AddDays(output.Value * 0.8),
+                2 => endDate.AddDays(Math.Max(output.Value - 7, 0)),
+                _ => endDate
+            };
+        }
+
+        output.DateValue = endDate;
+
+        return output;
+    }
+
+    public struct CalculatorOutput
+    {
+        public double Value;
+        public DateTime DateValue;
+
+        public CalculatorOutput()
+        {
+            Value = -1.0;
+        }
     }
 }
