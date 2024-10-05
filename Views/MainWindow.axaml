@@ -21,6 +21,7 @@
     <Border Padding="10" VerticalAlignment="Stretch">
         <DockPanel VerticalAlignment="Stretch" LastChildFill="True">
             
+            <!-- Theme Switching  -->
             <DockPanel DockPanel.Dock="Top">
                 <Menu Margin="0,0,0,20" DockPanel.Dock="Right" FlowDirection="RightToLeft">
                     <MenuItem ToolTip.Tip="Settings" ToolTip.Placement="Pointer">
@@ -35,6 +36,7 @@
                     </MenuItem>
                 </Menu>
                 
+                <!-- Mode Switching  -->
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Margin="10,0,0,0" Spacing="10">
                     <ComboBox Width="135" Height="35" ToolTip.Tip="Sets the ruleset to use for calculating the Day Supply and end Date" 
                               SelectedIndex="{Binding SelectedMode}" >
@@ -58,7 +60,7 @@
             </DockPanel>
 
             
-            <!-- Top Control Dock-->
+            <!-- Inputs Dock-->
             <DockPanel HorizontalAlignment="Stretch" Margin="10" MinWidth="150" LastChildFill="True" DockPanel.Dock="Top">
                 
                 <!-- Labels and Mode -->
