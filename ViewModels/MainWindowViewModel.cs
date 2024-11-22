@@ -102,6 +102,41 @@ public class MainWindowViewModel : ViewModelBase
     
     #region QDaySupplyCalculation
 
+    private bool _daySupplyOrQuantityVal;
+
+    public bool DaySupplyOrQuantityVal
+    {
+        get => _daySupplyOrQuantityVal;
+        set => this.RaiseAndSetIfChanged(ref _daySupplyOrQuantityVal, value);
+    }
+    
+    private string _daySupplyOrQuantityText;
+
+    public string DaySupplyOrQuantityText
+    {
+        get => _daySupplyOrQuantityText;
+        set => this.RaiseAndSetIfChanged(ref _daySupplyOrQuantityText, value);
+    }
+
+    private bool _daySupplyOrQuantityFlippedVal;
+    public bool DaySupplyOrQuantityFlippedVal
+    {
+        get => _daySupplyOrQuantityFlippedVal;
+        set => this.RaiseAndSetIfChanged(ref _daySupplyOrQuantityFlippedVal, value);
+    }
+
+    private int _dsMode;
+
+    public int DSMode
+    {
+        get => _dsMode;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _dsMode, value);
+            SetModeVal(value);
+        }
+    }
+
     /// <summary>
     /// The output value for calculations.
     /// </summary>
@@ -121,8 +156,6 @@ public class MainWindowViewModel : ViewModelBase
         get => _quantityOutput;
         set => this.RaiseAndSetIfChanged(ref _quantityOutput, value);
     }
-
-    
     
     /// <summary>
     /// Day supply or quantity input value.
@@ -201,6 +234,8 @@ public class MainWindowViewModel : ViewModelBase
         StartDate = DateTime.Today;
         EightyEndDate = StartDate.ToShortDateString();
         NewYorkEndDate = StartDate.ToShortDateString();
+        
+        SetModeVal(0);
         
         CalculateCommand = ReactiveCommand.Create(DoCalculateNormal, isInputValid);
         DoCalculateNormal();
@@ -315,5 +350,12 @@ public class MainWindowViewModel : ViewModelBase
 
         EightyVisible = _weekMode == WeekMode.EIGHTY_PERCENT ? 1.0 : 0.25;
         NewYorkVisible = weekMode == WeekMode.NEW_YORK ? 1.0 : 0.25;
+    }
+
+    private void SetModeVal(int mode)
+    {
+        DaySupplyOrQuantityVal = mode == 0;
+        DaySupplyOrQuantityFlippedVal = !DaySupplyOrQuantityVal;
+        DaySupplyOrQuantityText = DaySupplyOrQuantityVal ? "Quantity" : "Day Supply";
     }
 }

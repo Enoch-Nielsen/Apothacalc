@@ -43,12 +43,20 @@
                     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                         <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
                             <ToolTip.Tip>
-                                <TextBlock Text="The Quantity or the Day Supply of medication for the consumer."/>
+                                <StackPanel>
+                                    <TextBlock Text="For quantity enter the total grams, milliliters or number of units."/>
+                                    <TextBlock Text="For day supply enter the desired day supply. "/>
+                                </StackPanel>
                             </ToolTip.Tip>
                         </Image>
                         
-                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Quantity / Day Supply" VerticalAlignment="Center" FontWeight="Medium"/>
-                        <TextBox Watermark="Quantity or Day Supply" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        <ComboBox DockPanel.Dock="Right" Margin="15,0,30,0" MinHeight="48" 
+                                  SelectedIndex="{Binding DSMode}" Width="130">
+                            <ComboBoxItem>Quantity</ComboBoxItem>
+                            <ComboBoxItem>Day Supply</ComboBoxItem>
+                        </ComboBox>
+                        <!-- <TextBlock DockPanel.Dock="Right" Margin="15" Text="Quantity / Day Supply" VerticalAlignment="Center" FontWeight="Medium"/> -->
+                        <TextBox Watermark="{Binding DaySupplyOrQuantityText}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
                                  Text="{Binding DaySupplyOrQuantity}"/>
                     </DockPanel>
@@ -57,11 +65,11 @@
                     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                         <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
                             <ToolTip.Tip>
-                                <TextBlock Text="The total amount of medication taken each day."/>
+                                <TextBlock Text="Enter here the total daily dose. If  calculating a quantity, make sure the TDD units match with the quantity. "/>
                             </ToolTip.Tip>
                         </Image>
                         
-                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Medication Per Dose  " VerticalAlignment="Center" FontWeight="Medium"/>
+                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Total Daily Dose          " VerticalAlignment="Center" FontWeight="Medium"/>
                         <TextBox Watermark="Total Daily Dose" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
                                  Text="{Binding Dosage}"/>
@@ -71,13 +79,14 @@
                     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                         <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
                             <ToolTip.Tip>
-                                <TextBlock Text="The number of doses taken each week. Such as a dose being taken on Mon, Wed, Fri, would be 3 
-                                doses per week, a dose taken each day would be 7 doses per week. even if they take a dose twice per day, it would remain at 7."/>
+                                <!-- <TextBlock Text="The number of doses taken each week. Such as a dose being taken on Mon, Wed, Fri, would be 3  -->
+                                <!-- doses per week, a dose taken each day would be 7 doses per week. even if they take a dose twice per day, it would remain at 7."/> -->
+                                <TextBlock Text="Enter here the number of days per week the Rx will be used."/>
                             </ToolTip.Tip>
                         </Image>
                         
-                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Total Doses per Week" VerticalAlignment="Center" FontWeight="Medium"/>
-                        <TextBox Watermark="Doses per Week" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Days Per Week           " VerticalAlignment="Center" FontWeight="Medium"/>
+                        <TextBox Watermark="Days Per Week" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                                  TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
                                  Text="{Binding XPerWeek}"/>
                     </DockPanel>
@@ -88,7 +97,7 @@
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                             
                             <!-- Day Supply OUT -->
-                            <DockPanel>
+                            <DockPanel IsVisible="{Binding DaySupplyOrQuantityVal}">
                                 <TextBlock DockPanel.Dock="Left" Text="Day Supply = " VerticalAlignment="Center"/>
                                 <TextBox DockPanel.Dock="Right" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
                                          HorizontalAlignment="Right" VerticalAlignment="Center"
@@ -96,7 +105,7 @@
                             </DockPanel>
                             
                             <!-- Quantity OUT -->
-                            <DockPanel>
+                            <DockPanel IsVisible="{Binding DaySupplyOrQuantityFlippedVal}">
                                 <TextBlock DockPanel.Dock="Left" Text="Quantity = " VerticalAlignment="Center"/>
                                 <TextBox DockPanel.Dock="Right" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
                                          HorizontalAlignment="Right" VerticalAlignment="Center"
