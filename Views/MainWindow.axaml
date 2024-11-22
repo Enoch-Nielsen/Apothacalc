@@ -65,7 +65,7 @@
                     <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                         <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
                             <ToolTip.Tip>
-                                <TextBlock Text="Enter here the total daily dose. If  calculating a quantity, make sure the TDD units match with the quantity. "/>
+                                <TextBlock Text="Enter here the total daily dose. If calculating a quantity, make sure the TDD units match with the quantity. "/>
                             </ToolTip.Tip>
                         </Image>
                         
