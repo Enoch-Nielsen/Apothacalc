@@ -3,11 +3,11 @@
         xmlns:vm="using:Apothacalc.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="500"
-        Height="475"
-        MinWidth="500"
-        MinHeight="475"
-        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="475"
+        Width="720"
+        Height="600"
+        MinWidth="648"
+        MinHeight="560"
+        mc:Ignorable="d" d:DesignWidth="720" d:DesignHeight="600"
         x:Class="Apothacalc.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/Apothacalc_Icon.png"
@@ -18,106 +18,205 @@
     </Design.DataContext>
     
     <!-- Component Definition -->
-    <Border Padding="10" VerticalAlignment="Stretch">
+    <Border Padding="20,10,20,10" VerticalAlignment="Stretch">
         <DockPanel VerticalAlignment="Stretch" LastChildFill="True">
-            
-            <!-- Theme Switching  -->
-            <DockPanel DockPanel.Dock="Top">
-                <Menu Margin="0,0,0,20" DockPanel.Dock="Right" FlowDirection="RightToLeft">
-                    <MenuItem ToolTip.Tip="Settings" ToolTip.Placement="Pointer">
-                        <MenuItem.Header>
-                            <Image Source="/Assets/Settings_Icon.png" Width="24" Height="24"/>
-                        </MenuItem.Header>
-                    
-                        <MenuItem Header="_Theme">
-                            <MenuItem Header="_Dark" Command="{Binding SetDarkTheme}"/>
-                            <MenuItem Header="_Light" Command="{Binding SetLightTheme}"/>
-                        </MenuItem>
+            <Menu DockPanel.Dock="Top" FlowDirection="RightToLeft" Margin="0,0,-12,0">
+                <MenuItem ToolTip.Tip="Settings" ToolTip.Placement="Pointer">
+                    <MenuItem.Header>
+                        <Image Source="/Assets/Settings_Icon.png" Width="24" Height="24"/>
+                    </MenuItem.Header>
+
+                    <MenuItem Header="_Theme">
+                        <MenuItem Header="_Dark" Command="{Binding SetDarkTheme}" />
+                        <MenuItem Header="_Light" Command="{Binding SetLightTheme}" />
                     </MenuItem>
-                </Menu>
-                
-                <!-- Mode Switching  -->
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" Margin="10,0,0,0" Spacing="10">
-                    <ComboBox Width="135" Height="35" ToolTip.Tip="Sets the ruleset to use for calculating the Day Supply and end Date" 
-                              SelectedIndex="{Binding SelectedMode}" >
-                        <ComboBoxItem Content="Default"/>
-                        <ComboBoxItem Content="80% Rule"/>
-                        <ComboBoxItem Content="New York"/>
-                        <ComboBoxItem Content="Get Quantity"/>
-                    </ComboBox> 
-                    <Image Source="/Assets/Help_Icon.png" Width="24" Height="24" Margin="0,0,0,20" ToolTip.Placement="Pointer">
-                        <ToolTip.Tip>
-                            <StackPanel Spacing="5">
-                                <TextBlock Text="Default will directly calculate the End Date."/>
-                                <TextBlock Text="The 80% rule will set the end date to when the remaining supply is less than or equal to 80%"/>
-                                <TextBlock Text="The New York Rule will set the end date to 7 days before the Day Supply runs out."/>
-                                <TextBlock Text=" Get Quantity will calculate the Quantity from the given Day Supply."/>
-                            </StackPanel>
-                        </ToolTip.Tip>
-                    </Image>
-                </StackPanel>
-
-            </DockPanel>
-
+                </MenuItem>
+            </Menu>
             
-            <!-- Inputs Dock-->
-            <DockPanel HorizontalAlignment="Stretch" Margin="10" MinWidth="150" LastChildFill="True" DockPanel.Dock="Top">
+            <!-- Main Content -->
+            <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                 
-                <!-- Labels and Mode -->
-                <StackPanel DockPanel.Dock="Right" Spacing="45" Margin="10, 10, 10, 0" HorizontalAlignment="Right">
+                <!-- Day Supply or Quantity Calculation -->
+                <StackPanel DockPanel.Dock="Top" Spacing="20" Margin="0,20,0,0">
                     
-                    <!-- Input Labels -->
-                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" Text="{Binding ModeStringFlipped}"/>
-                    
-                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" Margin="0,8,0,0" Text="Total Daily Dose"/>
-                    
-                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" Margin="0,5,0,0"  Text="Doses Per Week"/>
-                    
-                    <TextBlock Classes="f1" TextAlignment="Left" HorizontalAlignment="Center" 
-                               VerticalAlignment="Center" Margin="0,5,0,0"  Text="Start Date" IsVisible="{Binding IsDaySupplyMode}"/>
-                </StackPanel>
-                
-                <!-- User Input  -->
-                <StackPanel DockPanel.Dock="Left" HorizontalAlignment="Stretch" Spacing="25">
-                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="{Binding ModeStringFlipped}" Text="{Binding DaySupplyOrQuantity}"/>
-                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="Dosage" Text="{Binding Dosage}"/>
-                    <TextBox Classes="f1" HorizontalAlignment="Stretch" Watermark="Doses Per Week" Text="{Binding XPerWeek}"/>
-                    <CalendarDatePicker Width="120" Height="45" SelectedDate="{Binding StartDate}" IsEnabled="{Binding IsDaySupplyMode}"/>
-                </StackPanel>
-                
-            </DockPanel> 
-            
-            <DockPanel DockPanel.Dock="Bottom" LastChildFill="True">
-                
-                <!-- Error Logging Text -->
-                <Viewbox Stretch="Uniform" StretchDirection="Both" DockPanel.Dock="Top" HorizontalAlignment="Center"
-                         Margin="100, 0" MinWidth="200" MinHeight="25" MaxWidth="250" MaxHeight="30">
-                    <TextBlock Text="{Binding Log}" HorizontalAlignment="Center"
-                               TextAlignment="Center" Classes="error"/>
-                </Viewbox>
-                
-                <!-- Output -->
-                <Viewbox Stretch="Uniform" StretchDirection="Both" DockPanel.Dock="Bottom" HorizontalAlignment="Center"
-                         Margin="150, 0" MinWidth="350" MinHeight="40" MaxWidth="425" MaxHeight="60">
-                    <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center" Margin="0, 0,0,10">
-                
-                        <!-- Output Text -->
-                        <TextBlock Text="{Binding ModeString}" 
-                                   TextAlignment="Right" VerticalAlignment="Center" Classes="f1" Width="120" MaxWidth="180" HorizontalAlignment="Center"/>
-                        <TextBox IsReadOnly="True" Focusable="False" Classes="f2" 
-                                 Text="{Binding Output}" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <!-- Quantity Input -->
+                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                        <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
+                            <ToolTip.Tip>
+                                <TextBlock Text="The Quantity or the Day Supply of medication for the consumer."/>
+                            </ToolTip.Tip>
+                        </Image>
                         
-                        <!-- Output Date -->
+                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Quantity / Day Supply" VerticalAlignment="Center" FontWeight="Medium"/>
+                        <TextBox Watermark="Quantity or Day Supply" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                 TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
+                                 Text="{Binding DaySupplyOrQuantity}"/>
+                    </DockPanel>
+                    
+                    <!-- Dose Input -->
+                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                        <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
+                            <ToolTip.Tip>
+                                <TextBlock Text="The total amount of medication taken each day."/>
+                            </ToolTip.Tip>
+                        </Image>
+                        
+                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Medication Per Dose  " VerticalAlignment="Center" FontWeight="Medium"/>
+                        <TextBox Watermark="Total Daily Dose" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                 TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
+                                 Text="{Binding Dosage}"/>
+                    </DockPanel>
+                    
+                    <!-- Doses/Week Input -->
+                    <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                        <Image DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
+                            <ToolTip.Tip>
+                                <TextBlock Text="The number of doses taken each week. Such as a dose being taken on Mon, Wed, Fri, would be 3 
+                                doses per week, a dose taken each day would be 7 doses per week. even if they take a dose twice per day, it would remain at 7."/>
+                            </ToolTip.Tip>
+                        </Image>
+                        
+                        <TextBlock DockPanel.Dock="Right" Margin="15" Text="Total Doses per Week" VerticalAlignment="Center" FontWeight="Medium"/>
+                        <TextBox Watermark="Doses per Week" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                 TextAlignment="Center" HorizontalAlignment="Stretch" FontWeight="DemiBold"
+                                 Text="{Binding XPerWeek}"/>
+                    </DockPanel>
+                    
+                    <!-- Output -->
+                    <Border Background="Teal" BorderThickness="2" CornerRadius="3"
+                            MinHeight="50" MaxWidth="200">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            
+                            <!-- Day Supply OUT -->
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Text="Day Supply = " VerticalAlignment="Center"/>
+                                <TextBox DockPanel.Dock="Right" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                         HorizontalAlignment="Right" VerticalAlignment="Center"
+                                         Text="{Binding DaySupplyOutput}"/>
+                            </DockPanel>
+                            
+                            <!-- Quantity OUT -->
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Left" Text="Quantity = " VerticalAlignment="Center"/>
+                                <TextBox DockPanel.Dock="Right" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                         HorizontalAlignment="Right" VerticalAlignment="Center"
+                                         Text="{Binding QuantityOutput}"/>
+                            </DockPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Log -->
+                    <TextBlock FontSize="12" FontWeight="Light" Foreground="Red" Text="{Binding Log}"
+                               Margin="0,-10,0,0" HorizontalAlignment="Center"/>
+                    
+                    <!-- Border Line -->
+                    <Border MinHeight="80" VerticalAlignment="Stretch" Margin="0,-40,0,0">
+                        <Border Background="DimGray" BorderThickness="2" MaxWidth="400" MaxHeight="3" 
+                                HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    </Border>
+                    
+                </StackPanel>
+                
+                <!-- Fill Date Calculator -->
+                <Panel>
+                    <DockPanel DockPanel.Dock="Bottom" LastChildFill="False" HorizontalAlignment="Stretch" MaxWidth="720" 
+                               MinHeight="80" MaxHeight="180" Height="150" Margin="0,0,0,50">
+                        
+                        <!-- Left Panel -->
+                        <Border DockPanel.Dock="Left" Background="Teal" BorderThickness="2" CornerRadius="3" Padding="-3" 
+                                Margin="0,10,0,0" HorizontalAlignment="Stretch" MinWidth="225">
+                            
+                            <StackPanel>
+                                <!-- Label -->
+                                <Border Background="SlateBlue" BorderThickness="3" CornerRadius="3" VerticalAlignment="Top" Padding="3">
+                                    <TextBlock Text="Next Fill Date Calculation" FontWeight="DemiBold"/>
+                                </Border>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                                    <TextBlock Text="Last Fill Date: " FontWeight="Medium" VerticalAlignment="Center"/>
+                                    <CalendarDatePicker SelectedDate="{Binding StartDate}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                                    <TextBlock Text="Day Supply: " FontWeight="Medium" MinWidth="94" VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding DateDaySupply}"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                        </Border>
+                        
+                        <!-- Right Panel -->
+                        <Border DockPanel.Dock="Right" BorderThickness="2" CornerRadius="3" Padding="-3" 
+                                Margin="0,10,0,0" HorizontalAlignment="Stretch" MinWidth="225">
+                            
+                            <StackPanel>
+                                
+                                <!-- 80% Rule -->
+                                <Border PointerPressed="Eighty_OnButtonPressed" Background="Teal" BorderThickness="2" CornerRadius="3" Padding="-3"
+                                        MinHeight="70" Opacity="{Binding EightyVisible}">
+                                    <StackPanel>
+                                        <!-- Label -->
+                                        <DockPanel>
+                                            <Border DockPanel.Dock="Left" Background="DarkGreen" BorderThickness="3" CornerRadius="3" VerticalAlignment="Top" Padding="3"
+                                                    MinWidth="100" HorizontalAlignment="Left">
+                                                <TextBlock Text="80% Rule" FontWeight="DemiBold"/>
+                                            </Border>
+                                            
+                                            <!-- Tooltip -->
+                                            <Image Margin="0,0, -96,0" DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
+                                                <ToolTip.Tip>
+                                                    <TextBlock Text="The 80% rule will project the refill date to when 80% of the medication has been used."/>
+                                                </ToolTip.Tip>
+                                            </Image>
+                                        </DockPanel>
+                                        
+                                        <!-- Output -->
+                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Spacing="5">
+                                            <TextBlock DockPanel.Dock="Left" Text="Next Fill Date:" FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding EightyEndDate}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     IsReadOnly="True"
+                                                     TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                                     MinWidth="100"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- New York Rule -->
+                                <Border PointerPressed="NewYork_OnButtonPressed" Background="Teal" BorderThickness="2" CornerRadius="3" Padding="-3"
+                                        MinHeight="70" Opacity="{Binding NewYorkVisible}">
+                                    <StackPanel>
+                                        <!-- Label -->
+                                        <DockPanel>
+                                            <Border Background="LightSlateGray" BorderThickness="3" CornerRadius="3" VerticalAlignment="Top" Padding="3"
+                                                    MinWidth="100" HorizontalAlignment="Left">
+                                                <TextBlock DockPanel.Dock="Left" Text="New York Rule" FontWeight="DemiBold"/>
+                                            </Border>
+                                            
+                                            <Image Margin="0,0, -86,0" DockPanel.Dock="Right" Source="/Assets/Help_Icon.png" Width="24" Height="24" ToolTip.Placement="Pointer">
+                                                <ToolTip.Tip>
+                                                    <TextBlock Text="The New York Rule will project the refill date to 7 days before the medication runs out."/>
+                                                </ToolTip.Tip>
+                                            </Image>
+                                        </DockPanel>
+                                        
+                                        <!-- Output -->
+                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Spacing="5">
+                                            <TextBlock DockPanel.Dock="Left" Text="Next Fill Date:" FontWeight="Medium"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBox Text="{Binding NewYorkEndDate}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                     IsReadOnly="True"
+                                                     TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                                     MinWidth="100"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </DockPanel>
+                    <Image Source="/Assets/Arrow_Right.png" Width="100" Height="100" Margin="0,0,0,50"/>
+                </Panel>
 
-                        <TextBlock Text="End Date: " 
-                                   TextAlignment="Right" VerticalAlignment="Center" Classes="f1" Width="120" MaxWidth="180" HorizontalAlignment="Center"/>
-                        <TextBox IsReadOnly="True" Focusable="False" Classes="f2" 
-                                 Text="{Binding EndDate}" TextAlignment="Center" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Viewbox>
             </DockPanel>
         </DockPanel>
     </Border>

@@ -18,25 +18,54 @@ namespace Apothacalc.ViewModels;
 /// </summary>
 public class MainWindowViewModel : ViewModelBase
 {
-    /// <summary>
-    /// The output value for calculations.
-    /// </summary>
-    private double _output;
-    public double Output
+    public static MainWindowViewModel? Instance { get; private set; }
+
+    #region DateCalculation
+
+    public enum WeekMode
     {
-        get => _output;
-        set => this.RaiseAndSetIfChanged(ref _output, value);
+        EIGHTY_PERCENT,
+        NEW_YORK
     }
 
-    /// <summary>
-    /// The output End Date.
-    /// </summary>
-    private string _endDate;
+    private WeekMode _weekMode = WeekMode.EIGHTY_PERCENT;
 
-    public string EndDate
+    private double _eightyVisible;
+
+    public double EightyVisible
     {
-        get => _endDate;
-        set => this.RaiseAndSetIfChanged(ref _endDate, value);
+        get => _eightyVisible;
+        set => this.RaiseAndSetIfChanged(ref _eightyVisible, value);
+    }
+    
+    private double _newYorkVisible;
+
+    public double NewYorkVisible
+    {
+        get => _newYorkVisible;
+        set => this.RaiseAndSetIfChanged(ref _newYorkVisible, value);
+    }
+    
+    /// <summary>
+    /// The 80% output End Date.
+    /// </summary>
+    private string _eightyEndDate;
+
+    public string EightyEndDate
+    {
+        get => _eightyEndDate;
+        set => this.RaiseAndSetIfChanged(ref _eightyEndDate, value);
+    }  
+    
+    /// <summary>
+    /// The New York output End Date.
+    /// </summary>
+    private string _newYorkEndDate;
+
+    public string NewYorkEndDate
+    {
+        get => _newYorkEndDate;
+        set => this.RaiseAndSetIfChanged(ref _newYorkEndDate, value);
     }  
     
     /// <summary>
@@ -47,8 +76,53 @@ public class MainWindowViewModel : ViewModelBase
     public DateTime StartDate
     {
         get => _startDate;
-        set => this.RaiseAndSetIfChanged(ref _startDate, value);
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _startDate, value); 
+            DoCalculateDate();            
+        }
     }
+
+
+    /// <summary>
+    /// Day supply or quantity input value.
+    /// </summary>
+    private string _dateDaySupply;
+    public string DateDaySupply
+    {
+        get => _dateDaySupply;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _dateDaySupply, value);
+            DoCalculateDate();
+        }
+    }
+
+    #endregion
+    
+    #region QDaySupplyCalculation
+
+    /// <summary>
+    /// The output value for calculations.
+    /// </summary>
+    private double _daySupplyOutput;
+    public double DaySupplyOutput
+    {
+        get => _daySupplyOutput;
+        set => this.RaiseAndSetIfChanged(ref _daySupplyOutput, value);
+    }
+
+    /// <summary>
+    /// The output value for calculations.
+    /// </summary>
+    private double _quantityOutput;
+    public double QuantityOutput
+    {
+        get => _quantityOutput;
+        set => this.RaiseAndSetIfChanged(ref _quantityOutput, value);
+    }
+
+    
     
     /// <summary>
     /// Day supply or quantity input value.
@@ -62,7 +136,7 @@ public class MainWindowViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _ds_q, value);
             IsValid = CheckIsValid();
         }
-    }
+    }    
 
     /// <summary>
     /// Dosage input value.
@@ -91,62 +165,7 @@ public class MainWindowViewModel : ViewModelBase
             IsValid = CheckIsValid();
         }
     }
-
-    /// <summary>
-    /// The users selected mode.
-    /// </summary>
-    private int _selection;
-
-    public int SelectedMode
-    {
-        get => _selection;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _selection, value);
-            IsValid = CheckIsValid();
-            
-            ModeString = SelectedMode == 3 ? "Quantity: " : "Day Supply: ";
-            ModeStringFlipped = SelectedMode != 3 ? "Quantity" : "Day Supply";
-            IsDaySupplyMode = SelectedMode != 3;
-            
-            if (!IsDaySupplyMode)
-                EndDate = "";
-        }
-    }
     
-    /// <summary>
-    /// The users selected mode.
-    /// </summary>
-    private bool _mode_s;
-
-    public bool IsDaySupplyMode
-    {
-        get => _mode_s;
-        set => this.RaiseAndSetIfChanged(ref _mode_s, value);
-    }
-
-    /// <summary>
-    /// The users mode converted to a string.
-    /// </summary>
-    private string _modeString;
-
-    public string ModeString
-    {
-        get => _modeString;
-        set => this.RaiseAndSetIfChanged(ref _modeString, value);
-    }
-    
-    /// <summary>
-    /// The users mode converted to a string.
-    /// </summary>
-    private string _modeStringFlipped;
-
-    public string ModeStringFlipped
-    {
-        get => _modeStringFlipped;
-        set => this.RaiseAndSetIfChanged(ref _modeStringFlipped, value);
-    }
-
     /// <summary>
     /// Whether the users input is valid.
     /// </summary>
@@ -156,6 +175,8 @@ public class MainWindowViewModel : ViewModelBase
         get => _isValid;
         set => this.RaiseAndSetIfChanged(ref _isValid, value);
     }
+
+    #endregion
 
     /// <summary>
     /// Log output value.
@@ -176,16 +197,20 @@ public class MainWindowViewModel : ViewModelBase
             x => x.IsValid,
             x => x == true
         );
-
-        ModeString = "Day Supply: ";
-        ModeStringFlipped = "Quantity";
-        IsDaySupplyMode = true;
         
         StartDate = DateTime.Today;
-        EndDate = StartDate.ToShortDateString();
+        EightyEndDate = StartDate.ToShortDateString();
+        NewYorkEndDate = StartDate.ToShortDateString();
         
-        CalculateCommand = ReactiveCommand.Create(DoCalculate, isInputValid);
-        DoCalculate();
+        CalculateCommand = ReactiveCommand.Create(DoCalculateNormal, isInputValid);
+        DoCalculateNormal();
+
+        EightyVisible = 1.0;
+        NewYorkVisible = 0.25;
+
+        Log = " ";
+        
+        Instance = this;
     }
 
     /// <summary>
@@ -210,7 +235,7 @@ public class MainWindowViewModel : ViewModelBase
         if (parseDose is < Calculator.DOSE_MIN or > Calculator.DOSE_MAX)           return LogData("Dosage out of range.");
         if (parseX is < Calculator.PER_WEEK_MIN or > Calculator.PER_WEEK_MAX)      return LogData("X' per week out of range.");
 
-        DoCalculate();
+        DoCalculateNormal();
         LogData("");
         
         return true;
@@ -226,7 +251,7 @@ public class MainWindowViewModel : ViewModelBase
         Log = error;
 
         if (error.Length > 1)
-            Output = 0;
+            DaySupplyOutput = 0;
         
         return false;
     }
@@ -234,18 +259,32 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>
     /// Button binding to begin calculation.
     /// </summary>
-    private void DoCalculate()
+    private void DoCalculateNormal()
     {
-        Calculator.CalculatorOutput calculatorOutput = Calculator.Calculate(DaySupplyOrQuantity, Dosage, XPerWeek, SelectedMode, _startDate);
+        Calculator.CalculatorOutputNormal calculatorOutputNormal = Calculator.Calculate(DaySupplyOrQuantity, Dosage, XPerWeek);
 
-        if (calculatorOutput.Value == -1.0)
+        if (calculatorOutputNormal.DaySupply == -1.0)
             return;
-        
-        Output = calculatorOutput.Value;
-        EndDate = calculatorOutput.DateValue.ToShortDateString();
-        
-        if (!IsDaySupplyMode)
-            EndDate = "";
+
+        QuantityOutput = calculatorOutputNormal.Quantity;
+        DaySupplyOutput = calculatorOutputNormal.DaySupply;
+    }
+    
+    /// <summary>
+    /// Button binding to begin calculation.
+    /// </summary>
+    private void DoCalculateDate()
+    {
+        try
+        {
+            Calculator.CalculatorOutputDate calculatorOutputDate = Calculator.CalculateDates(DateDaySupply, StartDate);
+            EightyEndDate = calculatorOutputDate.EightyDateValue.ToShortDateString();
+            NewYorkEndDate = calculatorOutputDate.NewYorkDateValue.ToShortDateString();
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
     }
 
     /// <summary>
@@ -264,5 +303,17 @@ public class MainWindowViewModel : ViewModelBase
     {
         if (Application.Current != null) 
             Application.Current.RequestedThemeVariant = ThemeVariant.Light;
+    }
+
+    /// <summary>
+    /// Sets the week mode.
+    /// </summary>
+    /// <param name="weekMode"></param>
+    public void SetWeekMode(WeekMode weekMode)
+    {
+        _weekMode = weekMode;
+
+        EightyVisible = _weekMode == WeekMode.EIGHTY_PERCENT ? 1.0 : 0.25;
+        NewYorkVisible = weekMode == WeekMode.NEW_YORK ? 1.0 : 0.25;
     }
 }

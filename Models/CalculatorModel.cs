@@ -24,46 +24,54 @@ public static class Calculator
     /// <param name="mode"></param>
     /// <param name="endDate"></param>
     /// <returns></returns>
-    public static CalculatorOutput Calculate(string daySupplyOrQuantity, string dosage, string xPerWeek, int mode, DateTime startDate)
+    public static CalculatorOutputNormal Calculate(string daySupplyOrQuantity, string dosage, string xPerWeek)
     {
-        if (!float.TryParse(daySupplyOrQuantity, out float parseDs)) return new CalculatorOutput();
-        if (!float.TryParse(dosage, out float parseDose)) return new CalculatorOutput();
-        if (!float.TryParse(xPerWeek, out float parseX)) return new CalculatorOutput();
+        if (!float.TryParse(daySupplyOrQuantity, out float parseDs)) return new CalculatorOutputNormal();
+        if (!float.TryParse(dosage, out float parseDose)) return new CalculatorOutputNormal();
+        if (!float.TryParse(xPerWeek, out float parseX)) return new CalculatorOutputNormal();
 
-        CalculatorOutput output = new();
-        DateTime endDate = startDate;
-        output.DateValue = endDate;
+        CalculatorOutputNormal output = new();
 
-        if (mode == 3)
+
+        output.Quantity = (Math.Round((parseDs / 7) * (parseDose * parseX) * 10) / 10.0);
+
+        output.DaySupply = (int)((parseDs / (parseDose * parseX)) * 7f);
+        
+        return output;
+    }
+
+    public static CalculatorOutputDate CalculateDates(string daySupply, DateTime startDate)
+    {
+        if (!float.TryParse(daySupply, out float parseDs))
         {
-            output.Value = (Math.Round((parseDs / 7) * (parseDose * parseX) * 10) / 10.0);
-        }
-        else
-        {
-            output.Value = (int)((parseDs / (parseDose * parseX)) * 7f);
-
-            endDate = mode switch
-            {
-                0 => endDate.AddDays(output.Value),
-                1 => endDate.AddDays(output.Value * 0.8),
-                2 => endDate.AddDays(Math.Max(output.Value - 7, 0)),
-                _ => endDate
-            };
+            throw new InvalidCastException("Unable to cast the given input for Date Day Supply!");
         }
 
-        output.DateValue = endDate;
+        CalculatorOutputDate output = new();
+        
+        output.NewYorkDateValue = startDate;
+        output.EightyDateValue = startDate;
+
+        output.NewYorkDateValue = output.NewYorkDateValue.AddDays(Math.Max(parseDs - 7, 0));
+        output.EightyDateValue = output.EightyDateValue.AddDays(parseDs * 0.8);
 
         return output;
     }
 
-    public struct CalculatorOutput
+    public struct CalculatorOutputNormal
     {
-        public double Value;
-        public DateTime DateValue;
+        public double DaySupply;
+        public double Quantity;
 
-        public CalculatorOutput()
+        public CalculatorOutputNormal()
         {
-            Value = -1.0;
+            DaySupply = -1.0;
         }
+    }
+    
+    public struct CalculatorOutputDate
+    {
+        public DateTime EightyDateValue;
+        public DateTime NewYorkDateValue;
     }
 }
